@@ -1,0 +1,25 @@
+.ff-game-canvas {
+  position: absolute;
+  inset: 0;
+}
+
+.ff-game-canvas__surface {
+  display: block;
+  width: 100%;
+  height: 100%;
+  cursor: grab;
+}
+
+.ff-game-canvas__surface:active {
+  cursor: grabbing;
+}
+
+.ff-game-canvas__loading {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  color: var(--ff-color-text-muted);
+  font-size: var(--ff-font-size-sm);
+  background: var(--ff-color-bg-canvas);
+}

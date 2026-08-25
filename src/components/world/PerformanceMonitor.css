@@ -1,0 +1,16 @@
+.ff-perf-monitor {
+  position: absolute;
+  bottom: var(--ff-space-5);
+  left: var(--ff-space-5);
+  display: flex;
+  gap: var(--ff-space-4);
+  padding: var(--ff-space-2) var(--ff-space-3);
+  background: var(--ff-color-bg-inset);
+  border: 1px solid var(--ff-color-border);
+  border-radius: var(--ff-radius-md);
+  font-family: var(--ff-font-mono);
+  font-size: var(--ff-font-size-xs);
+  color: var(--ff-color-text-muted);
+  pointer-events: none;
+  z-index: var(--ff-z-hud);
+}

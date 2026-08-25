@@ -8,6 +8,7 @@ import ResearchPanel from '../components/research/ResearchPanel'
 import SettingsPanel from '../components/settings/SettingsPanel'
 import ShortcutsHelp from '../components/settings/ShortcutsHelp'
 import NotificationStack from '../components/common/NotificationStack'
+import GameCanvas from '../components/world/GameCanvas.jsx'
 import './App.css'
 
 export default function App() {
@@ -19,10 +20,7 @@ export default function App() {
       <HudBar />
 
       <main className="ff-viewport">
-        <div className="ff-viewport__placeholder">
-          <span>Isometric world viewport</span>
-          <span className="ff-viewport__placeholder-sub">Renderer arrives in the next step</span>
-        </div>
+        <GameCanvas />
 
         <NotificationStack />
         <InspectorPanel />
