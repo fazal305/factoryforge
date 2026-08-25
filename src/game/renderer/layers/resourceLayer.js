@@ -2,6 +2,7 @@ import { worldToScreen } from '../camera.js'
 import { TILE_HEIGHT } from '../isoProjection.js'
 import { DEPOSIT, DEPOSIT_RESOURCE_ID } from '../../world/WorldGrid.js'
 import { RESOURCES } from '../../../data/resources.js'
+import { resolveTokenColor } from '../colorTokens.js'
 
 export function drawResourceLayer(ctx, world, camera, canvasWidth, canvasHeight, range) {
   const radius = Math.max(2, (TILE_HEIGHT / 5) * camera.zoom)
@@ -21,18 +22,4 @@ export function drawResourceLayer(ctx, world, camera, canvasWidth, canvasHeight,
       ctx.fill()
     }
   }
-}
-
-// Resource colors are defined as CSS custom properties so the HUD and
-// canvas stay in sync; the canvas 2D context needs the resolved value.
-let cachedStyle = null
-function resolveTokenColor(cssVarExpr) {
-  if (!cachedStyle) cachedStyle = getComputedStyle(document.documentElement)
-  const match = /var\((--[\w-]+)\)/.exec(cssVarExpr)
-  if (!match) return cssVarExpr
-  return cachedStyle.getPropertyValue(match[1]).trim() || '#999'
-}
-
-export function invalidateColorCache() {
-  cachedStyle = null
 }

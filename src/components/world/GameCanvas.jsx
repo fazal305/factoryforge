@@ -2,13 +2,15 @@ import { useEffect, useRef, useState } from 'react'
 import { createCamera } from '../../game/renderer/camera.js'
 import { tileToIso } from '../../game/renderer/isoProjection.js'
 import { drawFrame } from '../../game/renderer/CanvasRenderer.js'
-import { invalidateColorCache } from '../../game/renderer/layers/resourceLayer.js'
+import { invalidateColorCache } from '../../game/renderer/colorTokens.js'
 import { InputController } from '../../game/input/InputController.js'
 import { WorldGrid } from '../../game/world/WorldGrid.js'
 import { GameLoop } from '../../game/engine/GameLoop.js'
 import { SimulationState } from '../../game/simulation/SimulationState.js'
 import { tickExtraction } from '../../game/simulation/tickExtraction.js'
 import { tickProduction } from '../../game/simulation/tickProduction.js'
+import { tickLogistics } from '../../game/simulation/tickLogistics.js'
+import { tickInserters } from '../../game/simulation/tickInserters.js'
 import { setEngineInstance } from '../../game/engine/engineInstance.js'
 import { createPlaceCommand } from '../../game/engine/constructionCommands.js'
 import { canPlaceBuilding } from '../../game/world/placement.js'
@@ -84,6 +86,8 @@ export default function GameCanvas() {
     const simulation = new SimulationState(worldRef.current)
     simulation.registerSystem(tickExtraction)
     simulation.registerSystem(tickProduction)
+    simulation.registerSystem(tickLogistics)
+    simulation.registerSystem(tickInserters)
     const gameLoop = new GameLoop({ onTick: (dt) => simulation.runTick(dt) })
     const uiState = useUiStore.getState()
     gameLoop.setPaused(uiState.isPaused)

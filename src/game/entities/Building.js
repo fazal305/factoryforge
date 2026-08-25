@@ -1,4 +1,5 @@
 import { BUILD_CATEGORY } from '../../data/buildings.js'
+import { BELT_TYPES } from '../simulation/constants.js'
 import { rotatedFootprint, footprintTiles } from './footprint.js'
 import { DEPOSIT_RESOURCE_ID } from '../world/WorldGrid.js'
 
@@ -30,6 +31,12 @@ function findDeposit(world, x, y, footprint) {
  *  - mining: depositTileIndex/depositResourceId/progress/outputBuffer
  *  - recipe-capable (furnace/assembler): recipeId/inputBuffer/
  *    outputBuffer/progress/processing/status
+ *  - belts (conveyor/undergroundConveyor): items (positions along the
+ *    tile, see tickLogistics.js)
+ *  - inserter: cooldown (see tickInserters.js)
+ *  - storage: a single Map used as both inputBuffer and outputBuffer,
+ *    so an inserter can push to or pull from a chest with the same
+ *    code path it uses for a machine
  */
 export function createBuilding(typeId, def, x, y, rotation, world) {
   const building = {
@@ -56,6 +63,20 @@ export function createBuilding(typeId, def, x, y, rotation, world) {
     building.progress = 0
     building.processing = false
     building.status = 'idle'
+  }
+
+  if (BELT_TYPES.has(typeId)) {
+    building.items = []
+  }
+
+  if (typeId === 'inserter') {
+    building.cooldown = 0
+  }
+
+  if (def.category === BUILD_CATEGORY.STORAGE) {
+    const storage = new Map()
+    building.inputBuffer = storage
+    building.outputBuffer = storage
   }
 
   return building

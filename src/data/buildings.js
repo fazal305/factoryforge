@@ -61,6 +61,7 @@ export const BUILDINGS = {
     footprint: { width: 1, height: 1 },
     cost: { ironPlate: 1 },
     powerConsumption: 0,
+    beltSpeed: 2,
     description: 'Moves items between machines.',
   },
   undergroundConveyor: {
@@ -70,7 +71,8 @@ export const BUILDINGS = {
     footprint: { width: 1, height: 1 },
     cost: { ironPlate: 4, steel: 1 },
     powerConsumption: 0,
-    description: 'Routes items beneath obstacles or other belts.',
+    beltSpeed: 2,
+    description: 'Routes items beneath obstacles or other belts. Currently behaves as a regular belt segment — true underground pairing is not yet implemented.',
   },
   inserter: {
     id: 'inserter',
@@ -79,6 +81,7 @@ export const BUILDINGS = {
     footprint: { width: 1, height: 1 },
     cost: { ironPlate: 2, gear: 1 },
     powerConsumption: 5,
+    inserterSpeed: 1,
     description: 'Moves items between a belt and a machine slot.',
   },
   storageChest: {

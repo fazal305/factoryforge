@@ -1,6 +1,5 @@
 import { RECIPES } from '../../data/recipes.js'
-
-export const BUFFER_CAP = 50
+import { BUFFER_CAP } from './constants.js'
 
 /**
  * Furnace/assembler recipe processing. Inputs are consumed all at once

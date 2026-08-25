@@ -2,6 +2,7 @@ import { computeVisibleTileRange } from './viewportCulling.js'
 import { drawTerrainLayer } from './layers/terrainLayer.js'
 import { drawResourceLayer } from './layers/resourceLayer.js'
 import { drawBuildingLayer } from './layers/buildingLayer.js'
+import { drawLogisticsLayer } from './layers/logisticsLayer.js'
 import { drawPlacementGhostLayer } from './layers/placementGhostLayer.js'
 import { drawSelectionLayer } from './layers/selectionLayer.js'
 
@@ -19,6 +20,7 @@ export function drawFrame(ctx, simulation, camera, canvasWidth, canvasHeight, ho
   drawTerrainLayer(ctx, world, camera, canvasWidth, canvasHeight, range)
   drawResourceLayer(ctx, world, camera, canvasWidth, canvasHeight, range)
   drawBuildingLayer(ctx, simulation, camera, canvasWidth, canvasHeight, range, selectedBuildingId)
+  drawLogisticsLayer(ctx, simulation, camera, canvasWidth, canvasHeight, range)
   drawPlacementGhostLayer(ctx, simulation, camera, canvasWidth, canvasHeight, buildMode, hoverTile)
   drawSelectionLayer(ctx, world, camera, canvasWidth, canvasHeight, hoverTile, selectedTile)
 

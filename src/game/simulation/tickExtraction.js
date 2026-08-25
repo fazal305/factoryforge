@@ -1,6 +1,5 @@
 import { BUILDINGS, BUILD_CATEGORY } from '../../data/buildings.js'
-
-export const OUTPUT_BUFFER_CAP = 50
+import { BUFFER_CAP as OUTPUT_BUFFER_CAP } from './constants.js'
 
 /**
  * Mining drills accumulate fractional progress at their def's
