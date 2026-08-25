@@ -1,0 +1,19 @@
+.ff-settings {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ff-space-5);
+}
+
+.ff-settings__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: var(--ff-font-size-sm);
+  color: var(--ff-color-text-primary);
+  gap: var(--ff-space-4);
+}
+
+.ff-settings__row input[type='range'] {
+  flex: 1;
+  max-width: 160px;
+}

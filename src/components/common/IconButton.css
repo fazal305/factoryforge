@@ -1,0 +1,29 @@
+.ff-icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: var(--ff-radius-md);
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--ff-color-text-secondary);
+  transition: background var(--ff-duration-fast) var(--ff-ease-standard),
+    color var(--ff-duration-fast) var(--ff-ease-standard);
+}
+
+.ff-icon-btn:hover:not(:disabled) {
+  background: var(--ff-color-bg-panel-raised);
+  color: var(--ff-color-text-primary);
+}
+
+.ff-icon-btn--active {
+  background: var(--ff-color-accent-soft);
+  color: var(--ff-color-accent);
+  border-color: var(--ff-color-accent);
+}
+
+.ff-icon-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}

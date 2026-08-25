@@ -1,0 +1,9 @@
+/* Shared placement for floating secondary panels (stats, research). */
+.ff-side-panel {
+  position: absolute;
+  top: var(--ff-space-5);
+  left: var(--ff-space-5);
+  width: 360px;
+  max-height: calc(100vh - var(--ff-hud-height) - var(--ff-space-8));
+  z-index: var(--ff-z-panel);
+}

@@ -1,0 +1,96 @@
+.ff-hud {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  gap: var(--ff-space-6);
+  padding: 0 var(--ff-space-5);
+  background: var(--ff-color-bg-panel);
+  border-bottom: 1px solid var(--ff-color-border);
+  z-index: var(--ff-z-hud);
+}
+
+.ff-hud__brand {
+  font-size: var(--ff-font-size-sm);
+  font-weight: var(--ff-font-weight-bold);
+  letter-spacing: 0.08em;
+  color: var(--ff-color-accent);
+  white-space: nowrap;
+}
+
+.ff-hud__resources {
+  display: flex;
+  align-items: center;
+  gap: var(--ff-space-4);
+}
+
+.ff-hud__resource {
+  display: flex;
+  align-items: center;
+  gap: var(--ff-space-2);
+  font-variant-numeric: tabular-nums;
+  font-size: var(--ff-font-size-sm);
+  color: var(--ff-color-text-secondary);
+}
+
+.ff-hud__resource-swatch {
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+.ff-hud__power {
+  display: flex;
+  align-items: center;
+  gap: var(--ff-space-2);
+  font-size: var(--ff-font-size-sm);
+  font-variant-numeric: tabular-nums;
+  color: var(--ff-color-text-secondary);
+  padding: var(--ff-space-1) var(--ff-space-3);
+  border-radius: var(--ff-radius-md);
+}
+
+.ff-hud__power--overloaded {
+  color: var(--ff-color-danger);
+  background: var(--ff-color-danger-soft);
+}
+
+.ff-hud__transport {
+  display: flex;
+  align-items: center;
+  gap: var(--ff-space-3);
+  margin-left: auto;
+}
+
+.ff-hud__speeds {
+  display: flex;
+  gap: 2px;
+  background: var(--ff-color-bg-inset);
+  border-radius: var(--ff-radius-md);
+  padding: 2px;
+}
+
+.ff-hud__speed-btn {
+  border: none;
+  background: transparent;
+  color: var(--ff-color-text-muted);
+  font-size: var(--ff-font-size-xs);
+  font-variant-numeric: tabular-nums;
+  padding: var(--ff-space-2) var(--ff-space-3);
+  border-radius: var(--ff-radius-sm);
+}
+
+.ff-hud__speed-btn:hover {
+  color: var(--ff-color-text-primary);
+}
+
+.ff-hud__speed-btn--active {
+  background: var(--ff-color-accent);
+  color: var(--ff-color-text-inverse);
+  font-weight: var(--ff-font-weight-semibold);
+}
+
+.ff-hud__panels {
+  display: flex;
+  gap: var(--ff-space-2);
+}

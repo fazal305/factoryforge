@@ -1,0 +1,21 @@
+.ff-tooltip-wrap {
+  position: relative;
+  display: inline-flex;
+}
+
+.ff-tooltip {
+  position: absolute;
+  bottom: calc(100% + var(--ff-space-2));
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+  background: var(--ff-color-bg-inset);
+  border: 1px solid var(--ff-color-border-strong);
+  color: var(--ff-color-text-primary);
+  font-size: var(--ff-font-size-xs);
+  padding: var(--ff-space-2) var(--ff-space-3);
+  border-radius: var(--ff-radius-sm);
+  box-shadow: var(--ff-shadow-md);
+  z-index: var(--ff-z-tooltip);
+  pointer-events: none;
+}

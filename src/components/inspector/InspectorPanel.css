@@ -1,0 +1,14 @@
+.ff-inspector {
+  position: absolute;
+  top: var(--ff-space-5);
+  right: var(--ff-space-5);
+  bottom: var(--ff-space-5);
+  width: var(--ff-inspector-width);
+  z-index: var(--ff-z-panel);
+}
+
+.ff-inspector__empty {
+  color: var(--ff-color-text-muted);
+  font-size: var(--ff-font-size-sm);
+  line-height: var(--ff-line-height-base);
+}

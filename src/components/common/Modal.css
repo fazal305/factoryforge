@@ -1,0 +1,39 @@
+.ff-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(8, 10, 14, 0.6);
+  display: grid;
+  place-items: center;
+  z-index: var(--ff-z-modal);
+}
+
+.ff-modal {
+  width: min(480px, calc(100vw - 32px));
+  max-height: min(600px, calc(100vh - 64px));
+  display: flex;
+  flex-direction: column;
+  background: var(--ff-color-bg-panel);
+  border: 1px solid var(--ff-color-border-strong);
+  border-radius: var(--ff-radius-lg);
+  box-shadow: var(--ff-shadow-lg);
+  overflow: hidden;
+}
+
+.ff-modal__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--ff-space-5);
+  border-bottom: 1px solid var(--ff-color-border);
+}
+
+.ff-modal__title {
+  margin: 0;
+  font-size: var(--ff-font-size-md);
+  font-weight: var(--ff-font-weight-semibold);
+}
+
+.ff-modal__body {
+  padding: var(--ff-space-5);
+  overflow-y: auto;
+}

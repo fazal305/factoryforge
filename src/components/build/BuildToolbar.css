@@ -1,0 +1,111 @@
+.ff-build-toolbar {
+  position: absolute;
+  left: 50%;
+  bottom: var(--ff-space-5);
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--ff-space-3);
+  z-index: var(--ff-z-hud);
+}
+
+.ff-build-toolbar__categories {
+  display: flex;
+  align-items: center;
+  gap: var(--ff-space-2);
+  padding: var(--ff-space-2);
+  background: var(--ff-color-bg-panel);
+  border: 1px solid var(--ff-color-border);
+  border-radius: var(--ff-radius-lg);
+  box-shadow: var(--ff-shadow-md);
+}
+
+.ff-build-toolbar__cat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  width: 64px;
+  height: var(--ff-toolbar-height);
+  border: 1px solid transparent;
+  background: transparent;
+  border-radius: var(--ff-radius-md);
+  color: var(--ff-color-text-secondary);
+  font-size: 1.1rem;
+}
+
+.ff-build-toolbar__cat-label {
+  font-size: var(--ff-font-size-xs);
+  color: inherit;
+}
+
+.ff-build-toolbar__cat:hover {
+  background: var(--ff-color-bg-panel-raised);
+}
+
+.ff-build-toolbar__cat--active {
+  background: var(--ff-color-accent-soft);
+  border-color: var(--ff-color-accent);
+  color: var(--ff-color-accent);
+}
+
+.ff-build-toolbar__cancel {
+  border: 1px solid var(--ff-color-danger);
+  color: var(--ff-color-danger);
+  background: transparent;
+  border-radius: var(--ff-radius-md);
+  padding: 0 var(--ff-space-4);
+  height: var(--ff-toolbar-height);
+  font-size: var(--ff-font-size-sm);
+}
+
+.ff-build-toolbar__cancel:hover {
+  background: var(--ff-color-danger-soft);
+}
+
+.ff-build-flyout {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 240px;
+  padding: var(--ff-space-2);
+  background: var(--ff-color-bg-panel);
+  border: 1px solid var(--ff-color-border);
+  border-radius: var(--ff-radius-lg);
+  box-shadow: var(--ff-shadow-md);
+  max-height: 320px;
+  overflow-y: auto;
+}
+
+.ff-build-flyout__item {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  padding: var(--ff-space-3) var(--ff-space-4);
+  border-radius: var(--ff-radius-md);
+  border: 1px solid transparent;
+  background: transparent;
+  text-align: left;
+}
+
+.ff-build-flyout__item:hover {
+  background: var(--ff-color-bg-panel-raised);
+}
+
+.ff-build-flyout__item--active {
+  background: var(--ff-color-accent-soft);
+  border-color: var(--ff-color-accent);
+}
+
+.ff-build-flyout__name {
+  font-size: var(--ff-font-size-sm);
+  font-weight: var(--ff-font-weight-medium);
+  color: var(--ff-color-text-primary);
+}
+
+.ff-build-flyout__cost {
+  font-size: var(--ff-font-size-xs);
+  color: var(--ff-color-text-muted);
+}
