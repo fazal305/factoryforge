@@ -1,0 +1,55 @@
+@import "./tokens.css";
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  background: var(--ff-color-bg-canvas);
+  color: var(--ff-color-text-primary);
+  font-family: var(--ff-font-ui);
+  font-size: var(--ff-font-size-base);
+  line-height: var(--ff-line-height-base);
+  -webkit-font-smoothing: antialiased;
+  overflow: hidden;
+}
+
+button,
+input,
+select,
+textarea {
+  font-family: inherit;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+:focus-visible {
+  outline: none;
+  box-shadow: var(--ff-focus-ring);
+  border-radius: var(--ff-radius-sm);
+}
+
+::selection {
+  background: var(--ff-color-accent-soft);
+}
+
+.ff-app {
+  position: relative;
+  height: 100vh;
+  width: 100vw;
+  display: grid;
+  grid-template-rows: var(--ff-hud-height) 1fr;
+  overflow: hidden;
+}

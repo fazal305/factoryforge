@@ -1,0 +1,119 @@
+/*
+ * FactoryForge design tokens.
+ * All colors, spacing, typography, and other reusable design values live
+ * here as CSS custom properties. Components must reference these tokens
+ * rather than hardcoding values, so the visual language can evolve from
+ * one place.
+ */
+
+:root {
+  /* ---- Color: surfaces ---- */
+  --ff-color-bg-canvas: #14181f;
+  --ff-color-bg-panel: #1b2129;
+  --ff-color-bg-panel-raised: #232b35;
+  --ff-color-bg-inset: #10141a;
+  --ff-color-border: #2c3644;
+  --ff-color-border-strong: #3d4a5c;
+
+  /* ---- Color: text ---- */
+  --ff-color-text-primary: #e8ecf1;
+  --ff-color-text-secondary: #9aa7b8;
+  --ff-color-text-muted: #6a7787;
+  --ff-color-text-inverse: #14181f;
+
+  /* ---- Color: brand / accent ---- */
+  --ff-color-accent: #f4a52a;
+  --ff-color-accent-strong: #e0921f;
+  --ff-color-accent-soft: rgba(244, 165, 42, 0.16);
+
+  /* ---- Color: semantic ---- */
+  --ff-color-success: #4caf7d;
+  --ff-color-success-soft: rgba(76, 175, 125, 0.16);
+  --ff-color-warning: #e0a72e;
+  --ff-color-warning-soft: rgba(224, 167, 46, 0.16);
+  --ff-color-danger: #e2604f;
+  --ff-color-danger-soft: rgba(226, 96, 79, 0.16);
+  --ff-color-info: #4c9be0;
+  --ff-color-info-soft: rgba(76, 155, 224, 0.16);
+
+  /* ---- Color: resources (used consistently across HUD, inspector, charts) ---- */
+  --ff-color-resource-iron: #9fb2c4;
+  --ff-color-resource-copper: #d97b4a;
+  --ff-color-resource-coal: #4a4d55;
+  --ff-color-resource-stone: #8a7f6f;
+  --ff-color-resource-water: #4c9be0;
+  --ff-color-resource-steel: #c7cdd6;
+  --ff-color-resource-circuit: #6fbf8b;
+
+  /* ---- Typography ---- */
+  --ff-font-ui: "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --ff-font-mono: "JetBrains Mono", "Consolas", monospace;
+
+  --ff-font-size-xs: 0.6875rem;
+  --ff-font-size-sm: 0.8125rem;
+  --ff-font-size-base: 0.9375rem;
+  --ff-font-size-md: 1.0625rem;
+  --ff-font-size-lg: 1.25rem;
+  --ff-font-size-xl: 1.625rem;
+
+  --ff-font-weight-regular: 400;
+  --ff-font-weight-medium: 500;
+  --ff-font-weight-semibold: 600;
+  --ff-font-weight-bold: 700;
+
+  --ff-line-height-tight: 1.2;
+  --ff-line-height-base: 1.45;
+
+  /* ---- Spacing scale ---- */
+  --ff-space-1: 2px;
+  --ff-space-2: 4px;
+  --ff-space-3: 8px;
+  --ff-space-4: 12px;
+  --ff-space-5: 16px;
+  --ff-space-6: 20px;
+  --ff-space-7: 28px;
+  --ff-space-8: 36px;
+
+  /* ---- Radius ---- */
+  --ff-radius-sm: 3px;
+  --ff-radius-md: 6px;
+  --ff-radius-lg: 10px;
+  --ff-radius-pill: 999px;
+
+  /* ---- Shadow ---- */
+  --ff-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.35);
+  --ff-shadow-md: 0 4px 12px rgba(0, 0, 0, 0.4);
+  --ff-shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.45);
+
+  /* ---- Motion ---- */
+  --ff-duration-fast: 100ms;
+  --ff-duration-base: 160ms;
+  --ff-duration-slow: 240ms;
+  --ff-ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* ---- Z-index scale ---- */
+  --ff-z-canvas: 0;
+  --ff-z-hud: 10;
+  --ff-z-panel: 20;
+  --ff-z-overlay: 30;
+  --ff-z-modal: 40;
+  --ff-z-tooltip: 50;
+  --ff-z-toast: 60;
+
+  /* ---- Layout: panel sizing ---- */
+  --ff-hud-height: 52px;
+  --ff-toolbar-height: 64px;
+  --ff-inspector-width: 320px;
+  --ff-minimap-size: 176px;
+
+  /* ---- Focus ring (accessibility) ---- */
+  --ff-focus-ring: 0 0 0 2px var(--ff-color-bg-panel), 0 0 0 4px var(--ff-color-accent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --ff-duration-fast: 0ms;
+    --ff-duration-base: 0ms;
+    --ff-duration-slow: 0ms;
+  }
+}
