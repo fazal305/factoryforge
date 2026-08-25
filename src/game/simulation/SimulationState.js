@@ -1,9 +1,23 @@
 import { EventBus } from '../engine/EventBus.js'
+import { CommandHistory } from '../engine/CommandHistory.js'
+
+// Starting stock so building placement is testable before the mining
+// and processing chain (Step 7) can produce these materials itself.
+// Once extraction/production exist, a new game should start at zero
+// and this bootstrap goes away.
+const STARTING_INVENTORY = {
+  ironPlate: 60,
+  copperPlate: 30,
+  stone: 40,
+  gear: 20,
+  circuit: 15,
+  steel: 10,
+}
 
 /**
  * The engine-owned world: the WorldGrid plus everything that isn't a
  * pure terrain fact — buildings, conveyor items, and so on as those
- * systems come online (Step 6+). Deliberately not a Zustand store: it
+ * systems come online (Step 8+). Deliberately not a Zustand store: it
  * mutates every tick, and routing that through React state would mean
  * a re-render per tick.
  *
@@ -17,10 +31,12 @@ export class SimulationState {
     this.world = world
     this.events = new EventBus()
     this.systems = []
+    this.history = new CommandHistory()
 
-    // Populated by later steps: buildings (Step 6), conveyor item flow
-    // (Step 8), power grid (Step 9).
     this.buildings = []
+    this.buildingsById = new Map()
+
+    this.playerInventory = new Map(Object.entries(STARTING_INVENTORY))
   }
 
   registerSystem(system) {

@@ -1,4 +1,5 @@
 import { BUILD_CATEGORY, BUILD_CATEGORY_LABEL, buildingsByCategory } from '../../data/buildings'
+import { RESOURCES } from '../../data/resources'
 import { useUiStore } from '../../state/uiStore'
 import Tooltip from '../common/Tooltip'
 import './BuildToolbar.css'
@@ -41,7 +42,7 @@ export default function BuildToolbar() {
               <span className="ff-build-flyout__name">{building.name}</span>
               <span className="ff-build-flyout__cost">
                 {Object.entries(building.cost)
-                  .map(([resId, qty]) => `${qty} ${resId}`)
+                  .map(([resId, qty]) => `${qty} ${RESOURCES[resId].name}`)
                   .join(' · ')}
               </span>
             </button>

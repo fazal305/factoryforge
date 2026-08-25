@@ -1,11 +1,10 @@
 /**
- * Building catalog. UI (toolbar, build menu, tooltips) and the placement
- * system both read from this table — building behavior/stats should not
- * be duplicated or hardcoded in components.
+ * Building catalog. UI (toolbar, build menu, tooltips), the placement
+ * system, and (from Step 9) the power grid all read from this table —
+ * building behavior/stats should not be duplicated or hardcoded in
+ * components.
  *
- * Full stat fields (power, speed, recipe compatibility, footprint
- * collision rules) are filled in during the building-system step; this
- * initial pass provides enough shape for the toolbar and inspector UI.
+ * Recipe compatibility is added in Step 7 once recipes exist.
  */
 
 export const BUILD_CATEGORY = {
@@ -31,6 +30,7 @@ export const BUILDINGS = {
     category: BUILD_CATEGORY.MINING,
     footprint: { width: 2, height: 2 },
     cost: { ironPlate: 6, gear: 2 },
+    powerConsumption: 30,
     description: 'Extracts ore from a resource deposit beneath it.',
   },
   furnace: {
@@ -39,6 +39,7 @@ export const BUILDINGS = {
     category: BUILD_CATEGORY.PRODUCTION,
     footprint: { width: 2, height: 2 },
     cost: { stone: 10 },
+    powerConsumption: 0,
     description: 'Smelts raw ore into plates.',
   },
   assembler: {
@@ -47,6 +48,7 @@ export const BUILDINGS = {
     category: BUILD_CATEGORY.PRODUCTION,
     footprint: { width: 3, height: 3 },
     cost: { ironPlate: 12, gear: 6, circuit: 4 },
+    powerConsumption: 60,
     description: 'Combines inputs into higher-tier products via a recipe.',
   },
   conveyor: {
@@ -55,6 +57,7 @@ export const BUILDINGS = {
     category: BUILD_CATEGORY.LOGISTICS,
     footprint: { width: 1, height: 1 },
     cost: { ironPlate: 1 },
+    powerConsumption: 0,
     description: 'Moves items between machines.',
   },
   undergroundConveyor: {
@@ -63,6 +66,7 @@ export const BUILDINGS = {
     category: BUILD_CATEGORY.LOGISTICS,
     footprint: { width: 1, height: 1 },
     cost: { ironPlate: 4, steel: 1 },
+    powerConsumption: 0,
     description: 'Routes items beneath obstacles or other belts.',
   },
   inserter: {
@@ -71,6 +75,7 @@ export const BUILDINGS = {
     category: BUILD_CATEGORY.LOGISTICS,
     footprint: { width: 1, height: 1 },
     cost: { ironPlate: 2, gear: 1 },
+    powerConsumption: 5,
     description: 'Moves items between a belt and a machine slot.',
   },
   storageChest: {
@@ -79,6 +84,7 @@ export const BUILDINGS = {
     category: BUILD_CATEGORY.STORAGE,
     footprint: { width: 1, height: 1 },
     cost: { ironPlate: 8 },
+    powerConsumption: 0,
     description: 'Buffers items with a large stack capacity.',
   },
   powerGenerator: {
@@ -87,6 +93,7 @@ export const BUILDINGS = {
     category: BUILD_CATEGORY.POWER,
     footprint: { width: 2, height: 3 },
     cost: { ironPlate: 10, copperPlate: 6 },
+    powerGeneration: 150,
     description: 'Burns coal to produce electricity for the grid.',
   },
   powerPole: {
@@ -95,6 +102,7 @@ export const BUILDINGS = {
     category: BUILD_CATEGORY.POWER,
     footprint: { width: 1, height: 1 },
     cost: { copperPlate: 2, ironPlate: 1 },
+    powerConsumption: 0,
     description: 'Extends grid coverage to nearby buildings.',
   },
   researchStation: {
@@ -103,6 +111,7 @@ export const BUILDINGS = {
     category: BUILD_CATEGORY.PRODUCTION,
     footprint: { width: 3, height: 3 },
     cost: { ironPlate: 20, circuit: 10, gear: 8 },
+    powerConsumption: 40,
     description: 'Consumes research materials to unlock upgrades.',
   },
 }

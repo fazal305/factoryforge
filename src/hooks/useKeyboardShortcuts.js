@@ -1,5 +1,7 @@
 import { useEffect } from 'react'
 import { PANEL, useUiStore } from '../state/uiStore'
+import { getEngineInstance } from '../game/engine/engineInstance.js'
+import { createRemoveCommand } from '../game/engine/constructionCommands.js'
 
 /**
  * Global keyboard shortcuts. Ignored while typing in an input/textarea so
@@ -37,9 +39,35 @@ export function useKeyboardShortcuts() {
         case '?':
           openPanel(PANEL.SHORTCUTS)
           break
+        case 'Delete':
+        case 'Backspace':
+          handleRemoveSelected()
+          break
+        case 'u':
+        case 'U':
+          getEngineInstance()?.simulation.history.undo()
+          break
+        case 'z':
+        case 'Z':
+          if ((e.ctrlKey || e.metaKey) && e.shiftKey) {
+            e.preventDefault()
+            getEngineInstance()?.simulation.history.redo()
+          }
+          break
         default:
           break
       }
+    }
+
+    function handleRemoveSelected() {
+      const { selectedEntityId, clearSelection } = useUiStore.getState()
+      if (selectedEntityId == null) return
+      const engine = getEngineInstance()
+      if (!engine) return
+      const command = createRemoveCommand(engine.simulation, selectedEntityId)
+      if (!command) return
+      engine.simulation.history.execute(command)
+      clearSelection()
     }
 
     window.addEventListener('keydown', handleKeyDown)

@@ -8,6 +8,9 @@ import { WorldGrid } from '../../game/world/WorldGrid.js'
 import { GameLoop } from '../../game/engine/GameLoop.js'
 import { SimulationState } from '../../game/simulation/SimulationState.js'
 import { setEngineInstance } from '../../game/engine/engineInstance.js'
+import { createPlaceCommand } from '../../game/engine/constructionCommands.js'
+import { canPlaceBuilding } from '../../game/world/placement.js'
+import { BUILDINGS } from '../../data/buildings.js'
 import { useUiStore } from '../../state/uiStore.js'
 import PerformanceMonitor from './PerformanceMonitor.jsx'
 import './GameCanvas.css'
@@ -94,7 +97,33 @@ export default function GameCanvas() {
       },
       onSelectTile: (tile) => {
         const world = worldRef.current
-        selectedTileRef.current = world && world.inBounds(tile.x, tile.y) ? tile : null
+        if (!world || !world.inBounds(tile.x, tile.y)) {
+          selectedTileRef.current = null
+          return
+        }
+
+        const ui = useUiStore.getState()
+
+        if (ui.selectedBuildingId) {
+          const { valid, reason } = canPlaceBuilding(simulation, ui.selectedBuildingId, tile.x, tile.y, ui.placementRotation)
+          if (valid) {
+            simulation.history.execute(createPlaceCommand(simulation, ui.selectedBuildingId, tile.x, tile.y, ui.placementRotation))
+            ui.pushNotification({ tone: 'success', message: `${BUILDINGS[ui.selectedBuildingId].name} placed` })
+          } else {
+            ui.pushNotification({ tone: 'warning', message: reason })
+          }
+          selectedTileRef.current = null
+          return
+        }
+
+        const buildingId = world.buildingId[world.index(tile.x, tile.y)]
+        if (buildingId !== -1) {
+          ui.selectEntity(buildingId)
+          selectedTileRef.current = null
+        } else {
+          ui.selectEntity(null)
+          selectedTileRef.current = tile
+        }
       },
     })
     input.attach()
@@ -108,10 +137,23 @@ export default function GameCanvas() {
     function loop(now) {
       tickAccum += gameLoop.advance(now)
 
-      const world = worldRef.current
       const { width, height } = canvasSizeRef.current
-      if (world && width > 0 && height > 0) {
-        const range = drawFrame(ctx, world, cameraRef.current, width, height, hoverTileRef.current, selectedTileRef.current)
+      if (width > 0 && height > 0) {
+        const ui = useUiStore.getState()
+        const buildMode = ui.selectedBuildingId
+          ? { typeId: ui.selectedBuildingId, rotation: ui.placementRotation }
+          : null
+        const range = drawFrame(
+          ctx,
+          simulation,
+          cameraRef.current,
+          width,
+          height,
+          hoverTileRef.current,
+          selectedTileRef.current,
+          buildMode,
+          ui.selectedEntityId,
+        )
         visibleTiles = (range.maxX - range.minX + 1) * (range.maxY - range.minY + 1)
       }
 
