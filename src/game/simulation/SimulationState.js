@@ -37,6 +37,8 @@ export class SimulationState {
     this.buildingsById = new Map()
 
     this.playerInventory = new Map(Object.entries(STARTING_INVENTORY))
+
+    this.powerSummary = { production: 0, consumption: 0, overloaded: false }
   }
 
   registerSystem(system) {

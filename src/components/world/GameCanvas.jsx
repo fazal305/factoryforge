@@ -11,6 +11,7 @@ import { tickExtraction } from '../../game/simulation/tickExtraction.js'
 import { tickProduction } from '../../game/simulation/tickProduction.js'
 import { tickLogistics } from '../../game/simulation/tickLogistics.js'
 import { tickInserters } from '../../game/simulation/tickInserters.js'
+import { tickPower } from '../../game/simulation/tickPower.js'
 import { setEngineInstance } from '../../game/engine/engineInstance.js'
 import { createPlaceCommand } from '../../game/engine/constructionCommands.js'
 import { canPlaceBuilding } from '../../game/world/placement.js'
@@ -84,6 +85,7 @@ export default function GameCanvas() {
     resizeObserver.observe(container)
 
     const simulation = new SimulationState(worldRef.current)
+    simulation.registerSystem(tickPower)
     simulation.registerSystem(tickExtraction)
     simulation.registerSystem(tickProduction)
     simulation.registerSystem(tickLogistics)
@@ -95,6 +97,9 @@ export default function GameCanvas() {
     const unsubscribeUi = useUiStore.subscribe((state) => {
       gameLoop.setPaused(state.isPaused)
       gameLoop.setSpeed(state.simSpeed)
+    })
+    const unsubscribePowerShortage = simulation.events.on('powerShortage', () => {
+      useUiStore.getState().pushNotification({ tone: 'warning', message: 'Power grid overload — some machines are unpowered' })
     })
     setEngineInstance({ simulation, gameLoop })
 
@@ -185,6 +190,7 @@ export default function GameCanvas() {
       input.detach()
       resizeObserver.disconnect()
       unsubscribeUi()
+      unsubscribePowerShortage()
       setEngineInstance(null)
     }
   }, [loading])

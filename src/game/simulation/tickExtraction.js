@@ -15,6 +15,7 @@ export function tickExtraction(simulation, dt) {
   for (const building of simulation.buildings) {
     const def = BUILDINGS[building.typeId]
     if (def.category !== BUILD_CATEGORY.MINING) continue
+    if (!building.powered) continue
     if (building.depositTileIndex === null) continue
 
     const remaining = world.depositAmount[building.depositTileIndex]

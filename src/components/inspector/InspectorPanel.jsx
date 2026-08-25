@@ -16,6 +16,7 @@ const STATUS_LABEL = {
   starved: 'Waiting for input',
   blocked: 'Output full',
   running: 'Running',
+  unpowered: 'Unpowered',
 }
 
 const STATUS_TONE = {
@@ -23,6 +24,7 @@ const STATUS_TONE = {
   starved: 'warning',
   blocked: 'danger',
   running: 'success',
+  unpowered: 'danger',
 }
 
 function bufferEntries(buffer) {
@@ -146,6 +148,22 @@ export default function InspectorPanel() {
             </div>
           )}
         </dl>
+
+        {def.powerConsumption > 0 && (
+          <span className={`ff-inspector__status ff-inspector__status--${building.powered ? 'success' : 'danger'}`}>
+            {building.powered ? 'Powered' : 'Unpowered — not in range of a pole with enough supply'}
+          </span>
+        )}
+
+        {building.fuelSeconds !== undefined && (
+          <div className="ff-inspector__section">
+            <span className={`ff-inspector__status ff-inspector__status--${building.generating ? 'success' : 'warning'}`}>
+              {building.generating ? 'Generating' : 'No fuel'}
+            </span>
+            <ProgressBar value={Math.min(1, building.fuelSeconds / def.fuelPerCoal)} label="fuel" />
+            <BufferList title="Fuel (coal)" buffer={building.inputBuffer} />
+          </div>
+        )}
 
         {building.depositTileIndex !== undefined && (
           <div className="ff-inspector__section">

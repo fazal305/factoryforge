@@ -3,6 +3,7 @@ import { drawTerrainLayer } from './layers/terrainLayer.js'
 import { drawResourceLayer } from './layers/resourceLayer.js'
 import { drawBuildingLayer } from './layers/buildingLayer.js'
 import { drawLogisticsLayer } from './layers/logisticsLayer.js'
+import { drawPowerRangeLayer } from './layers/powerRangeLayer.js'
 import { drawPlacementGhostLayer } from './layers/placementGhostLayer.js'
 import { drawSelectionLayer } from './layers/selectionLayer.js'
 
@@ -21,6 +22,7 @@ export function drawFrame(ctx, simulation, camera, canvasWidth, canvasHeight, ho
   drawResourceLayer(ctx, world, camera, canvasWidth, canvasHeight, range)
   drawBuildingLayer(ctx, simulation, camera, canvasWidth, canvasHeight, range, selectedBuildingId)
   drawLogisticsLayer(ctx, simulation, camera, canvasWidth, canvasHeight, range)
+  drawPowerRangeLayer(ctx, simulation, camera, canvasWidth, canvasHeight, selectedBuildingId)
   drawPlacementGhostLayer(ctx, simulation, camera, canvasWidth, canvasHeight, buildMode, hoverTile)
   drawSelectionLayer(ctx, world, camera, canvasWidth, canvasHeight, hoverTile, selectedTile)
 

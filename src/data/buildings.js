@@ -100,6 +100,7 @@ export const BUILDINGS = {
     footprint: { width: 2, height: 3 },
     cost: { ironPlate: 10, copperPlate: 6 },
     powerGeneration: 150,
+    fuelPerCoal: 20,
     description: 'Burns coal to produce electricity for the grid.',
   },
   powerPole: {
@@ -109,6 +110,7 @@ export const BUILDINGS = {
     footprint: { width: 1, height: 1 },
     cost: { copperPlate: 2, ironPlate: 1 },
     powerConsumption: 0,
+    powerRange: 6,
     description: 'Extends grid coverage to nearby buildings.',
   },
   researchStation: {

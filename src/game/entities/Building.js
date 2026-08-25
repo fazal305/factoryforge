@@ -37,6 +37,13 @@ function findDeposit(world, x, y, footprint) {
  *  - storage: a single Map used as both inputBuffer and outputBuffer,
  *    so an inserter can push to or pull from a chest with the same
  *    code path it uses for a machine
+ *  - generator: inputBuffer (coal fuel), fuelSeconds/generating (see
+ *    tickPower.js)
+ *
+ * `powered` defaults true for every building — tickPower.js only ever
+ * overwrites it for buildings whose def.powerConsumption > 0, so
+ * anything that doesn't need power (a furnace, a belt, a pole itself)
+ * is simply never touched and stays powered.
  */
 export function createBuilding(typeId, def, x, y, rotation, world) {
   const building = {
@@ -46,6 +53,7 @@ export function createBuilding(typeId, def, x, y, rotation, world) {
     y,
     rotation,
     footprint: rotatedFootprint(def.footprint, rotation),
+    powered: true,
   }
 
   if (def.category === BUILD_CATEGORY.MINING) {
@@ -77,6 +85,12 @@ export function createBuilding(typeId, def, x, y, rotation, world) {
     const storage = new Map()
     building.inputBuffer = storage
     building.outputBuffer = storage
+  }
+
+  if (def.powerGeneration > 0) {
+    building.inputBuffer = new Map()
+    building.fuelSeconds = 0
+    building.generating = false
   }
 
   return building

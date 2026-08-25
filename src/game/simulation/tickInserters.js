@@ -25,6 +25,7 @@ function pickAvailableResource(buffer) {
 export function tickInserters(simulation, dt) {
   for (const building of simulation.buildings) {
     if (building.typeId !== 'inserter') continue
+    if (!building.powered) continue
 
     building.cooldown -= dt
     if (building.cooldown > 0) continue

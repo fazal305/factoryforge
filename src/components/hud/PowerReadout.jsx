@@ -1,10 +1,12 @@
-// Placeholder figures until the power system (Step 9) reports real
-// production/consumption from the simulation snapshot.
-const PLACEHOLDER_POWER = { production: 0, consumption: 0 }
+import { useCallback } from 'react'
+import { useSimulationSnapshot } from '../../hooks/useSimulationSnapshot.js'
 
 export default function PowerReadout() {
-  const { production, consumption } = PLACEHOLDER_POWER
-  const overloaded = consumption > production
+  const selectPower = useCallback((engine) => engine.simulation.powerSummary, [])
+  const summary = useSimulationSnapshot(selectPower, 400)
+  const production = Math.round(summary?.production ?? 0)
+  const consumption = Math.round(summary?.consumption ?? 0)
+  const overloaded = summary?.overloaded ?? false
 
   return (
     <div className={`ff-hud__power${overloaded ? ' ff-hud__power--overloaded' : ''}`} title="Power grid">
@@ -14,6 +16,7 @@ export default function PowerReadout() {
       <span className="ff-hud__power-value">
         {consumption} / {production} kW
       </span>
+      {overloaded && <span className="ff-hud__power-warning">⚠ OVERLOAD</span>}
     </div>
   )
 }

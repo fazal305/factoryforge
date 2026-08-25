@@ -18,6 +18,11 @@ export function tickProduction(simulation, dt) {
       continue
     }
 
+    if (!building.powered) {
+      building.status = 'unpowered'
+      continue
+    }
+
     const recipe = RECIPES[building.recipeId]
 
     if (!building.processing) {
