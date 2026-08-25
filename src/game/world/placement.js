@@ -82,7 +82,7 @@ export function unregisterBuilding(simulation, building) {
 /** Caller must validate with canPlaceBuilding first. */
 export function placeBuilding(simulation, typeId, x, y, rotation) {
   const def = BUILDINGS[typeId]
-  const building = createBuilding(typeId, def, x, y, rotation)
+  const building = createBuilding(typeId, def, x, y, rotation, simulation.world)
   writeFootprint(simulation.world, building)
   deductCost(simulation, def.cost)
   registerBuilding(simulation, building)

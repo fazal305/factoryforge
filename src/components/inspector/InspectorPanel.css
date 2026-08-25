@@ -64,3 +64,103 @@
   color: var(--ff-color-text-secondary);
   line-height: var(--ff-line-height-base);
 }
+
+.ff-inspector__section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ff-space-3);
+  padding-top: var(--ff-space-3);
+  border-top: 1px solid var(--ff-color-border);
+}
+
+.ff-inspector__warning {
+  margin: 0;
+  font-size: var(--ff-font-size-sm);
+  color: var(--ff-color-warning);
+}
+
+.ff-inspector__status {
+  display: inline-block;
+  width: fit-content;
+  font-size: var(--ff-font-size-xs);
+  font-weight: var(--ff-font-weight-medium);
+  padding: var(--ff-space-1) var(--ff-space-3);
+  border-radius: var(--ff-radius-pill);
+  background: var(--ff-color-bg-inset);
+  color: var(--ff-color-text-secondary);
+}
+
+.ff-inspector__status--warning {
+  background: var(--ff-color-warning-soft);
+  color: var(--ff-color-warning);
+}
+
+.ff-inspector__status--danger {
+  background: var(--ff-color-danger-soft);
+  color: var(--ff-color-danger);
+}
+
+.ff-inspector__status--success {
+  background: var(--ff-color-success-soft);
+  color: var(--ff-color-success);
+}
+
+.ff-inspector__recipes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--ff-space-2);
+}
+
+.ff-inspector__recipe {
+  border: 1px solid var(--ff-color-border);
+  background: var(--ff-color-bg-panel-raised);
+  color: var(--ff-color-text-secondary);
+  border-radius: var(--ff-radius-md);
+  padding: var(--ff-space-2) var(--ff-space-3);
+  font-size: var(--ff-font-size-xs);
+}
+
+.ff-inspector__recipe:hover {
+  border-color: var(--ff-color-border-strong);
+  color: var(--ff-color-text-primary);
+}
+
+.ff-inspector__recipe--active {
+  background: var(--ff-color-accent-soft);
+  border-color: var(--ff-color-accent);
+  color: var(--ff-color-accent);
+}
+
+.ff-inspector__buffer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ff-space-1);
+}
+
+.ff-inspector__buffer-title {
+  font-size: var(--ff-font-size-xs);
+  color: var(--ff-color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.ff-inspector__buffer-empty {
+  font-size: var(--ff-font-size-sm);
+  color: var(--ff-color-text-muted);
+}
+
+.ff-inspector__buffer-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--ff-space-1);
+  font-size: var(--ff-font-size-sm);
+}
+
+.ff-inspector__buffer-list li {
+  display: flex;
+  align-items: center;
+  gap: var(--ff-space-2);
+}

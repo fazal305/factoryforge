@@ -31,6 +31,7 @@ export const BUILDINGS = {
     footprint: { width: 2, height: 2 },
     cost: { ironPlate: 6, gear: 2 },
     powerConsumption: 30,
+    miningSpeed: 0.5,
     description: 'Extracts ore from a resource deposit beneath it.',
   },
   furnace: {
@@ -40,6 +41,7 @@ export const BUILDINGS = {
     footprint: { width: 2, height: 2 },
     cost: { stone: 10 },
     powerConsumption: 0,
+    recipeCapable: true,
     description: 'Smelts raw ore into plates.',
   },
   assembler: {
@@ -49,6 +51,7 @@ export const BUILDINGS = {
     footprint: { width: 3, height: 3 },
     cost: { ironPlate: 12, gear: 6, circuit: 4 },
     powerConsumption: 60,
+    recipeCapable: true,
     description: 'Combines inputs into higher-tier products via a recipe.',
   },
   conveyor: {
