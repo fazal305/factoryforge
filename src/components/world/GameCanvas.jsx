@@ -5,6 +5,10 @@ import { drawFrame } from '../../game/renderer/CanvasRenderer.js'
 import { invalidateColorCache } from '../../game/renderer/layers/resourceLayer.js'
 import { InputController } from '../../game/input/InputController.js'
 import { WorldGrid } from '../../game/world/WorldGrid.js'
+import { GameLoop } from '../../game/engine/GameLoop.js'
+import { SimulationState } from '../../game/simulation/SimulationState.js'
+import { setEngineInstance } from '../../game/engine/engineInstance.js'
+import { useUiStore } from '../../state/uiStore.js'
 import PerformanceMonitor from './PerformanceMonitor.jsx'
 import './GameCanvas.css'
 
@@ -28,7 +32,7 @@ export default function GameCanvas() {
   const canvasSizeRef = useRef({ width: 0, height: 0 })
 
   const [loading, setLoading] = useState(true)
-  const [stats, setStats] = useState({ fps: 0, visibleTiles: 0 })
+  const [stats, setStats] = useState({ fps: 0, tps: 0, visibleTiles: 0 })
 
   useEffect(() => {
     const worker = new Worker(new URL('../../workers/worldGen.worker.js', import.meta.url), {
@@ -72,6 +76,17 @@ export default function GameCanvas() {
     const resizeObserver = new ResizeObserver(resize)
     resizeObserver.observe(container)
 
+    const simulation = new SimulationState(worldRef.current)
+    const gameLoop = new GameLoop({ onTick: (dt) => simulation.runTick(dt) })
+    const uiState = useUiStore.getState()
+    gameLoop.setPaused(uiState.isPaused)
+    gameLoop.setSpeed(uiState.simSpeed)
+    const unsubscribeUi = useUiStore.subscribe((state) => {
+      gameLoop.setPaused(state.isPaused)
+      gameLoop.setSpeed(state.simSpeed)
+    })
+    setEngineInstance({ simulation, gameLoop })
+
     const input = new InputController(canvas, cameraRef.current, {
       getCanvasSize: () => canvasSizeRef.current,
       onHoverTile: (tile) => {
@@ -86,10 +101,13 @@ export default function GameCanvas() {
 
     let rafId
     let frameCount = 0
+    let tickAccum = 0
     let lastFpsSample = performance.now()
     let visibleTiles = 0
 
     function loop(now) {
+      tickAccum += gameLoop.advance(now)
+
       const world = worldRef.current
       const { width, height } = canvasSizeRef.current
       if (world && width > 0 && height > 0) {
@@ -99,10 +117,13 @@ export default function GameCanvas() {
 
       frameCount++
       if (now - lastFpsSample >= 500) {
-        const fps = Math.round((frameCount * 1000) / (now - lastFpsSample))
+        const elapsedMs = now - lastFpsSample
+        const fps = Math.round((frameCount * 1000) / elapsedMs)
+        const tps = Math.round((tickAccum * 1000) / elapsedMs)
         frameCount = 0
+        tickAccum = 0
         lastFpsSample = now
-        setStats({ fps, visibleTiles })
+        setStats({ fps, tps, visibleTiles })
       }
 
       rafId = requestAnimationFrame(loop)
@@ -113,6 +134,8 @@ export default function GameCanvas() {
       cancelAnimationFrame(rafId)
       input.detach()
       resizeObserver.disconnect()
+      unsubscribeUi()
+      setEngineInstance(null)
     }
   }, [loading])
 
