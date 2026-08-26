@@ -117,3 +117,12 @@
     --ff-duration-slow: 0ms;
   }
 }
+
+/* In-game "reduced motion" toggle (Settings) — same effect as the OS
+   preference above, so it works even when the OS-level setting isn't
+   available or the player just prefers stillness in this one app. */
+:root[data-reduced-motion='true'] {
+  --ff-duration-fast: 0ms;
+  --ff-duration-base: 0ms;
+  --ff-duration-slow: 0ms;
+}

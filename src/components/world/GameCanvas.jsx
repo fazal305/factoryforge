@@ -247,7 +247,12 @@ export default function GameCanvas({ initialSave }) {
 
   return (
     <div ref={containerRef} className="ff-game-canvas">
-      <canvas ref={canvasRef} className="ff-game-canvas__surface" />
+      <canvas
+        ref={canvasRef}
+        className="ff-game-canvas__surface"
+        role="application"
+        aria-label="Factory world. Drag to pan, scroll to zoom, click a tile to select or place a building. Use the build toolbar and inspector panel for full control."
+      />
       {loading && (
         <div className="ff-game-canvas__loading">
           <span>{initialSave ? 'Loading save…' : 'Generating world…'}</span>

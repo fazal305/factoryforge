@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { PANEL, useUiStore } from '../state/uiStore'
 import { useKeyboardShortcuts } from '../hooks/useKeyboardShortcuts'
 import HudBar from '../components/hud/HudBar'
@@ -16,6 +17,11 @@ export default function App() {
   const activePanel = useUiStore((s) => s.activePanel)
   const worldEpoch = useUiStore((s) => s.worldEpoch)
   const pendingLoad = useUiStore((s) => s.pendingLoad)
+  const reducedMotion = useUiStore((s) => s.settings.reducedMotion)
+
+  useEffect(() => {
+    document.documentElement.dataset.reducedMotion = String(reducedMotion)
+  }, [reducedMotion])
 
   return (
     <div className="ff-app">
