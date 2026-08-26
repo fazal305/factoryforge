@@ -99,6 +99,15 @@
   border-color: var(--ff-color-accent);
 }
 
+.ff-build-flyout__item:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.ff-build-flyout__item:disabled:hover {
+  background: transparent;
+}
+
 .ff-build-flyout__name {
   font-size: var(--ff-font-size-sm);
   font-weight: var(--ff-font-weight-medium);

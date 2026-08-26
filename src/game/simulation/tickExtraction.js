@@ -1,4 +1,5 @@
 import { BUILDINGS, BUILD_CATEGORY } from '../../data/buildings.js'
+import { MINING_SPEED_BOOST_MULTIPLIER } from '../../data/research.js'
 
 /**
  * Mining drills accumulate fractional progress at their def's
@@ -27,7 +28,8 @@ export function tickExtraction(simulation, dt) {
     const space = building.outputBuffer.spaceFor(building.depositResourceId)
     if (space <= 0) continue
 
-    building.progress += dt * def.miningSpeed
+    const speedMultiplier = simulation.completedResearch.has('improvedMining') ? MINING_SPEED_BOOST_MULTIPLIER : 1
+    building.progress += dt * def.miningSpeed * speedMultiplier
     if (building.progress < 1) continue
 
     const whole = Math.floor(building.progress)

@@ -120,6 +120,7 @@ export const BUILDINGS = {
     footprint: { width: 3, height: 3 },
     cost: { ironPlate: 20, circuit: 10, gear: 8 },
     powerConsumption: 40,
+    researchCapable: true,
     description: 'Consumes research materials to unlock upgrades.',
   },
 }

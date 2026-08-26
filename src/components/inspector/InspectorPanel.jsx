@@ -6,6 +6,7 @@ import { createRemoveCommand } from '../../game/engine/constructionCommands.js'
 import { BUILD_CATEGORY, BUILDINGS, BUILD_CATEGORY_LABEL } from '../../data/buildings'
 import { RECIPES, recipesForBuilding } from '../../data/recipes'
 import { RESOURCES } from '../../data/resources'
+import { RESEARCH, isRecipeUnlocked, recipeUnlockRequirement } from '../../data/research'
 import Panel from '../common/Panel'
 import Button from '../common/Button'
 import ProgressBar from '../common/ProgressBar'
@@ -79,6 +80,8 @@ export default function InspectorPanel() {
         outputBuffer: b.outputBuffer?.clone(),
         depositRemaining:
           b.depositTileIndex != null ? engine.simulation.world.depositAmount[b.depositTileIndex] : null,
+        completedResearch: new Set(engine.simulation.completedResearch),
+        activeResearchId: engine.simulation.activeResearchId,
       }
     },
     [selectedEntityId],
@@ -194,6 +197,23 @@ export default function InspectorPanel() {
           </div>
         )}
 
+        {building.researching !== undefined && (
+          <div className="ff-inspector__section">
+            <span className={`ff-inspector__status ff-inspector__status--${STATUS_TONE[building.status] ?? 'default'}`}>
+              {STATUS_LABEL[building.status] ?? building.status}
+            </span>
+            {building.activeResearchId ? (
+              <>
+                <p className="ff-inspector__description">Researching: {RESEARCH[building.activeResearchId].name}</p>
+                <ProgressBar value={building.progress / RESEARCH[building.activeResearchId].cycleTime} label={STATUS_LABEL[building.status]} />
+              </>
+            ) : (
+              <p className="ff-inspector__warning">No active research — pick one in the Research panel.</p>
+            )}
+            <BufferList title="Science pack" buffer={building.inputBuffer} />
+          </div>
+        )}
+
         {building.recipeId !== undefined && (
           <div className="ff-inspector__section">
             <span className={`ff-inspector__status ff-inspector__status--${STATUS_TONE[building.status] ?? 'default'}`}>
@@ -201,16 +221,23 @@ export default function InspectorPanel() {
             </span>
 
             <div className="ff-inspector__recipes">
-              {recipesForBuilding(building.typeId).map((recipe) => (
-                <button
-                  key={recipe.id}
-                  type="button"
-                  className={`ff-inspector__recipe${building.recipeId === recipe.id ? ' ff-inspector__recipe--active' : ''}`}
-                  onClick={() => handleSelectRecipe(recipe.id)}
-                >
-                  {recipe.name}
-                </button>
-              ))}
+              {recipesForBuilding(building.typeId).map((recipe) => {
+                const unlocked = isRecipeUnlocked(recipe.id, building.completedResearch)
+                const requirement = recipeUnlockRequirement(recipe.id)
+                return (
+                  <button
+                    key={recipe.id}
+                    type="button"
+                    disabled={!unlocked}
+                    className={`ff-inspector__recipe${building.recipeId === recipe.id ? ' ff-inspector__recipe--active' : ''}`}
+                    onClick={() => handleSelectRecipe(recipe.id)}
+                    title={unlocked ? undefined : `Requires research: ${requirement.name}`}
+                  >
+                    {recipe.name}
+                    {!unlocked && ' 🔒'}
+                  </button>
+                )
+              })}
             </div>
 
             {building.recipeId && (

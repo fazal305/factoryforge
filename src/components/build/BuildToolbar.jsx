@@ -1,6 +1,9 @@
+import { useCallback } from 'react'
 import { BUILD_CATEGORY, BUILD_CATEGORY_LABEL, buildingsByCategory } from '../../data/buildings'
 import { RESOURCES } from '../../data/resources'
+import { buildingUnlockRequirement, isBuildingUnlocked } from '../../data/research'
 import { useUiStore } from '../../state/uiStore'
+import { useSimulationSnapshot } from '../../hooks/useSimulationSnapshot.js'
 import Tooltip from '../common/Tooltip'
 import './BuildToolbar.css'
 
@@ -16,8 +19,10 @@ const CATEGORIES = Object.values(BUILD_CATEGORY)
 
 /**
  * Bottom build toolbar. Selecting a category expands a flyout of its
- * buildings; selecting a building arms placement mode (consumed by the
- * renderer/input controller in a later step).
+ * buildings; selecting a building arms placement mode. A building
+ * gated behind research still appears — disabled, with the
+ * requirement named — rather than disappearing, so the tree reads as
+ * "coming up" instead of hidden.
  */
 export default function BuildToolbar() {
   const activeBuildCategory = useUiStore((s) => s.activeBuildCategory)
@@ -26,27 +31,40 @@ export default function BuildToolbar() {
   const selectBuildingForPlacement = useUiStore((s) => s.selectBuildingForPlacement)
   const cancelBuildMode = useUiStore((s) => s.cancelBuildMode)
 
+  const selectCompletedResearch = useCallback((engine) => new Set(engine.simulation.completedResearch), [])
+  const completedResearch = useSimulationSnapshot(selectCompletedResearch, 500) ?? new Set()
+
   return (
     <div className="ff-build-toolbar">
       {activeBuildCategory && (
         <div className="ff-build-flyout" role="menu" aria-label={BUILD_CATEGORY_LABEL[activeBuildCategory]}>
-          {buildingsByCategory(activeBuildCategory).map((building) => (
-            <button
-              key={building.id}
-              type="button"
-              role="menuitem"
-              className={`ff-build-flyout__item${selectedBuildingId === building.id ? ' ff-build-flyout__item--active' : ''}`}
-              onClick={() => selectBuildingForPlacement(building.id)}
-              title={building.description}
-            >
-              <span className="ff-build-flyout__name">{building.name}</span>
-              <span className="ff-build-flyout__cost">
-                {Object.entries(building.cost)
-                  .map(([resId, qty]) => `${qty} ${RESOURCES[resId].name}`)
-                  .join(' · ')}
-              </span>
-            </button>
-          ))}
+          {buildingsByCategory(activeBuildCategory).map((building) => {
+            const unlocked = isBuildingUnlocked(building.id, completedResearch)
+            const requirement = buildingUnlockRequirement(building.id)
+            return (
+              <button
+                key={building.id}
+                type="button"
+                role="menuitem"
+                disabled={!unlocked}
+                className={`ff-build-flyout__item${selectedBuildingId === building.id ? ' ff-build-flyout__item--active' : ''}`}
+                onClick={() => selectBuildingForPlacement(building.id)}
+                title={unlocked ? building.description : `Requires research: ${requirement.name}`}
+              >
+                <span className="ff-build-flyout__name">
+                  {building.name}
+                  {!unlocked && ' 🔒'}
+                </span>
+                <span className="ff-build-flyout__cost">
+                  {unlocked
+                    ? Object.entries(building.cost)
+                        .map(([resId, qty]) => `${qty} ${RESOURCES[resId].name}`)
+                        .join(' · ')
+                    : `Requires ${requirement.name}`}
+                </span>
+              </button>
+            )
+          })}
         </div>
       )}
 

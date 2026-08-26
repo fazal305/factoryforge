@@ -43,6 +43,10 @@ export class SimulationState {
     }
 
     this.powerSummary = { production: 0, consumption: 0, overloaded: false }
+
+    this.completedResearch = new Set()
+    this.activeResearchId = null
+    this.researchProgressByNode = new Map()
   }
 
   registerSystem(system) {

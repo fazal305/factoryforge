@@ -40,6 +40,11 @@ function findDeposit(world, x, y, footprint) {
  *    pull from a chest with the same code path it uses for a machine
  *  - generator: inputBuffer (coal fuel), fuelSeconds/generating (see
  *    tickPower.js)
+ *  - research station (researchCapable): inputBuffer (science pack
+ *    cost), progress/researching/status (see tickResearch.js) — what
+ *    it's researching is tracked globally on the simulation, not per
+ *    station, so switching the active node doesn't discard a station
+ *    mid-cycle
  *
  * Machine input/output ports use a flat BUFFER_CAP Inventory rather
  * than each resource's full stack limit — a buffer, not storage.
@@ -95,6 +100,13 @@ export function createBuilding(typeId, def, x, y, rotation, world) {
     building.inputBuffer = new Inventory(BUFFER_CAP)
     building.fuelSeconds = 0
     building.generating = false
+  }
+
+  if (def.researchCapable) {
+    building.inputBuffer = new Inventory(BUFFER_CAP)
+    building.progress = 0
+    building.researching = false
+    building.status = 'idle'
   }
 
   return building
