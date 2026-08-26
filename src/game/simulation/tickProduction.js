@@ -1,5 +1,4 @@
 import { RECIPES } from '../../data/recipes.js'
-import { BUFFER_CAP } from './constants.js'
 
 /**
  * Furnace/assembler recipe processing. Inputs are consumed all at once
@@ -26,16 +25,16 @@ export function tickProduction(simulation, dt) {
     const recipe = RECIPES[building.recipeId]
 
     if (!building.processing) {
-      const inputsReady = Object.entries(recipe.input).every(
-        ([resourceId, qty]) => (building.inputBuffer.get(resourceId) ?? 0) >= qty,
+      const inputsReady = Object.entries(recipe.input).every(([resourceId, qty]) =>
+        building.inputBuffer.has(resourceId, qty),
       )
       if (!inputsReady) {
         building.status = 'starved'
         continue
       }
 
-      const outputsHaveRoom = Object.entries(recipe.output).every(
-        ([resourceId, qty]) => (building.outputBuffer.get(resourceId) ?? 0) + qty <= BUFFER_CAP,
+      const outputsHaveRoom = Object.entries(recipe.output).every(([resourceId, qty]) =>
+        building.outputBuffer.canAdd(resourceId, qty),
       )
       if (!outputsHaveRoom) {
         building.status = 'blocked'
@@ -43,7 +42,7 @@ export function tickProduction(simulation, dt) {
       }
 
       for (const [resourceId, qty] of Object.entries(recipe.input)) {
-        building.inputBuffer.set(resourceId, building.inputBuffer.get(resourceId) - qty)
+        building.inputBuffer.remove(resourceId, qty)
       }
       building.processing = true
       building.progress = 0
@@ -53,7 +52,7 @@ export function tickProduction(simulation, dt) {
     building.progress += dt
     if (building.progress >= recipe.time) {
       for (const [resourceId, qty] of Object.entries(recipe.output)) {
-        building.outputBuffer.set(resourceId, (building.outputBuffer.get(resourceId) ?? 0) + qty)
+        building.outputBuffer.add(resourceId, qty)
       }
       building.processing = false
       building.progress = 0

@@ -1,18 +1,11 @@
 import { BUILDINGS } from '../../data/buildings.js'
 import { directionDelta } from '../world/directions.js'
-import { BUFFER_CAP, ITEM_SPACING } from './constants.js'
+import { ITEM_SPACING } from './constants.js'
 
 function buildingAt(simulation, x, y) {
   if (!simulation.world.inBounds(x, y)) return null
   const id = simulation.world.buildingId[simulation.world.index(x, y)]
   return id === -1 ? null : simulation.buildingsById.get(id)
-}
-
-function pickAvailableResource(buffer) {
-  for (const [resourceId, qty] of buffer) {
-    if (qty > 0) return resourceId
-  }
-  return null
 }
 
 /**
@@ -36,7 +29,7 @@ export function tickInserters(simulation, dt) {
     if (!source || !dest) continue
 
     const takingFromBelt = Array.isArray(source.items)
-    const resourceId = takingFromBelt ? source.items[0]?.resourceId : pickAvailableResource(source.outputBuffer ?? [])
+    const resourceId = takingFromBelt ? source.items[0]?.resourceId : source.outputBuffer?.firstAvailable()
     if (!resourceId) continue
 
     let deposited = false
@@ -46,12 +39,9 @@ export function tickInserters(simulation, dt) {
         dest.items.push({ resourceId, distance: 0 })
         deposited = true
       }
-    } else if (dest.inputBuffer) {
-      const current = dest.inputBuffer.get(resourceId) ?? 0
-      if (current < BUFFER_CAP) {
-        dest.inputBuffer.set(resourceId, current + 1)
-        deposited = true
-      }
+    } else if (dest.inputBuffer?.canAdd(resourceId, 1)) {
+      dest.inputBuffer.add(resourceId, 1)
+      deposited = true
     }
 
     if (!deposited) continue
@@ -59,7 +49,7 @@ export function tickInserters(simulation, dt) {
     if (takingFromBelt) {
       source.items.shift()
     } else {
-      source.outputBuffer.set(resourceId, source.outputBuffer.get(resourceId) - 1)
+      source.outputBuffer.remove(resourceId, 1)
     }
 
     building.cooldown = 1 / BUILDINGS.inserter.inserterSpeed

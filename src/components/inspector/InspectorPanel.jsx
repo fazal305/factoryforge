@@ -3,7 +3,7 @@ import { useUiStore } from '../../state/uiStore'
 import { useSimulationSnapshot } from '../../hooks/useSimulationSnapshot.js'
 import { getEngineInstance } from '../../game/engine/engineInstance.js'
 import { createRemoveCommand } from '../../game/engine/constructionCommands.js'
-import { BUILDINGS, BUILD_CATEGORY_LABEL } from '../../data/buildings'
+import { BUILD_CATEGORY, BUILDINGS, BUILD_CATEGORY_LABEL } from '../../data/buildings'
 import { RECIPES, recipesForBuilding } from '../../data/recipes'
 import { RESOURCES } from '../../data/resources'
 import Panel from '../common/Panel'
@@ -75,8 +75,8 @@ export default function InspectorPanel() {
       // React would never see a change to re-render on.
       return {
         ...b,
-        inputBuffer: b.inputBuffer ? new Map(b.inputBuffer) : undefined,
-        outputBuffer: b.outputBuffer ? new Map(b.outputBuffer) : undefined,
+        inputBuffer: b.inputBuffer?.clone(),
+        outputBuffer: b.outputBuffer?.clone(),
         depositRemaining:
           b.depositTileIndex != null ? engine.simulation.world.depositAmount[b.depositTileIndex] : null,
       }
@@ -162,6 +162,12 @@ export default function InspectorPanel() {
             </span>
             <ProgressBar value={Math.min(1, building.fuelSeconds / def.fuelPerCoal)} label="fuel" />
             <BufferList title="Fuel (coal)" buffer={building.inputBuffer} />
+          </div>
+        )}
+
+        {def.category === BUILD_CATEGORY.STORAGE && (
+          <div className="ff-inspector__section">
+            <BufferList title="Stored" buffer={building.inputBuffer} />
           </div>
         )}
 

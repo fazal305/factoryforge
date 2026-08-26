@@ -75,12 +75,8 @@ export function tickPower(simulation, dt) {
   for (const generator of generators) {
     const def = BUILDINGS[generator.typeId]
 
-    if (generator.fuelSeconds <= 0) {
-      const coal = generator.inputBuffer.get('coal') ?? 0
-      if (coal > 0) {
-        generator.inputBuffer.set('coal', coal - 1)
-        generator.fuelSeconds += def.fuelPerCoal
-      }
+    if (generator.fuelSeconds <= 0 && generator.inputBuffer.remove('coal', 1) > 0) {
+      generator.fuelSeconds += def.fuelPerCoal
     }
     generator.generating = generator.fuelSeconds > 0
     if (generator.generating) generator.fuelSeconds = Math.max(0, generator.fuelSeconds - dt)

@@ -1,5 +1,4 @@
 import { BUILDINGS, BUILD_CATEGORY } from '../../data/buildings.js'
-import { BUFFER_CAP as OUTPUT_BUFFER_CAP } from './constants.js'
 
 /**
  * Mining drills accumulate fractional progress at their def's
@@ -25,8 +24,8 @@ export function tickExtraction(simulation, dt) {
       continue
     }
 
-    const currentBuffered = building.outputBuffer.get(building.depositResourceId) ?? 0
-    if (currentBuffered >= OUTPUT_BUFFER_CAP) continue
+    const space = building.outputBuffer.spaceFor(building.depositResourceId)
+    if (space <= 0) continue
 
     building.progress += dt * def.miningSpeed
     if (building.progress < 1) continue
@@ -34,10 +33,10 @@ export function tickExtraction(simulation, dt) {
     const whole = Math.floor(building.progress)
     building.progress -= whole
 
-    const extracted = Math.min(whole, remaining, OUTPUT_BUFFER_CAP - currentBuffered)
+    const extracted = Math.min(whole, remaining)
     if (extracted <= 0) continue
 
-    world.depositAmount[building.depositTileIndex] -= extracted
-    building.outputBuffer.set(building.depositResourceId, currentBuffered + extracted)
+    const added = building.outputBuffer.add(building.depositResourceId, extracted)
+    world.depositAmount[building.depositTileIndex] -= added
   }
 }

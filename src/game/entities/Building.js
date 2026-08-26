@@ -1,5 +1,6 @@
 import { BUILD_CATEGORY } from '../../data/buildings.js'
-import { BELT_TYPES } from '../simulation/constants.js'
+import { BELT_TYPES, BUFFER_CAP } from '../simulation/constants.js'
+import { Inventory } from '../simulation/Inventory.js'
 import { rotatedFootprint, footprintTiles } from './footprint.js'
 import { DEPOSIT_RESOURCE_ID } from '../world/WorldGrid.js'
 
@@ -34,11 +35,14 @@ function findDeposit(world, x, y, footprint) {
  *  - belts (conveyor/undergroundConveyor): items (positions along the
  *    tile, see tickLogistics.js)
  *  - inserter: cooldown (see tickInserters.js)
- *  - storage: a single Map used as both inputBuffer and outputBuffer,
- *    so an inserter can push to or pull from a chest with the same
- *    code path it uses for a machine
+ *  - storage: a single Inventory (full stack-limit capacity) used as
+ *    both inputBuffer and outputBuffer, so an inserter can push to or
+ *    pull from a chest with the same code path it uses for a machine
  *  - generator: inputBuffer (coal fuel), fuelSeconds/generating (see
  *    tickPower.js)
+ *
+ * Machine input/output ports use a flat BUFFER_CAP Inventory rather
+ * than each resource's full stack limit — a buffer, not storage.
  *
  * `powered` defaults true for every building — tickPower.js only ever
  * overwrites it for buildings whose def.powerConsumption > 0, so
@@ -61,13 +65,13 @@ export function createBuilding(typeId, def, x, y, rotation, world) {
     building.depositTileIndex = deposit?.tileIndex ?? null
     building.depositResourceId = deposit ? DEPOSIT_RESOURCE_ID[deposit.type] : null
     building.progress = 0
-    building.outputBuffer = new Map()
+    building.outputBuffer = new Inventory(BUFFER_CAP)
   }
 
   if (def.recipeCapable) {
     building.recipeId = null
-    building.inputBuffer = new Map()
-    building.outputBuffer = new Map()
+    building.inputBuffer = new Inventory(BUFFER_CAP)
+    building.outputBuffer = new Inventory(BUFFER_CAP)
     building.progress = 0
     building.processing = false
     building.status = 'idle'
@@ -82,13 +86,13 @@ export function createBuilding(typeId, def, x, y, rotation, world) {
   }
 
   if (def.category === BUILD_CATEGORY.STORAGE) {
-    const storage = new Map()
+    const storage = new Inventory()
     building.inputBuffer = storage
     building.outputBuffer = storage
   }
 
   if (def.powerGeneration > 0) {
-    building.inputBuffer = new Map()
+    building.inputBuffer = new Inventory(BUFFER_CAP)
     building.fuelSeconds = 0
     building.generating = false
   }

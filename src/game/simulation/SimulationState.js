@@ -1,5 +1,6 @@
 import { EventBus } from '../engine/EventBus.js'
 import { CommandHistory } from '../engine/CommandHistory.js'
+import { Inventory } from './Inventory.js'
 
 // Starting stock so building placement is testable before the mining
 // and processing chain (Step 7) can produce these materials itself.
@@ -36,7 +37,10 @@ export class SimulationState {
     this.buildings = []
     this.buildingsById = new Map()
 
-    this.playerInventory = new Map(Object.entries(STARTING_INVENTORY))
+    this.playerInventory = new Inventory()
+    for (const [resourceId, qty] of Object.entries(STARTING_INVENTORY)) {
+      this.playerInventory.add(resourceId, qty)
+    }
 
     this.powerSummary = { production: 0, consumption: 0, overloaded: false }
   }

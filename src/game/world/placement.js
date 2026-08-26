@@ -29,8 +29,7 @@ export function canPlaceBuilding(simulation, typeId, x, y, rotation) {
   }
 
   for (const [resourceId, qty] of Object.entries(def.cost)) {
-    const have = simulation.playerInventory.get(resourceId) ?? 0
-    if (have < qty) {
+    if (!simulation.playerInventory.has(resourceId, qty)) {
       return { valid: false, reason: `Not enough ${RESOURCES[resourceId].name}` }
     }
   }
@@ -57,13 +56,13 @@ export function clearFootprint(world, building) {
 
 export function deductCost(simulation, cost) {
   for (const [resourceId, qty] of Object.entries(cost)) {
-    simulation.playerInventory.set(resourceId, (simulation.playerInventory.get(resourceId) ?? 0) - qty)
+    simulation.playerInventory.remove(resourceId, qty)
   }
 }
 
 export function refundCost(simulation, cost) {
   for (const [resourceId, qty] of Object.entries(cost)) {
-    simulation.playerInventory.set(resourceId, (simulation.playerInventory.get(resourceId) ?? 0) + qty)
+    simulation.playerInventory.add(resourceId, qty)
   }
 }
 
