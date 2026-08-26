@@ -53,7 +53,7 @@ export default function GameCanvas({ initialSave }) {
   const canvasSizeRef = useRef({ width: 0, height: 0 })
 
   const [loading, setLoading] = useState(true)
-  const [stats, setStats] = useState({ fps: 0, tps: 0, visibleTiles: 0 })
+  const [stats, setStats] = useState({ fps: 0, tps: 0, visibleTiles: 0, entities: 0, activeMachines: 0 })
 
   useEffect(() => {
     if (initialSave) {
@@ -225,7 +225,9 @@ export default function GameCanvas({ initialSave }) {
         frameCount = 0
         tickAccum = 0
         lastFpsSample = now
-        setStats({ fps, tps, visibleTiles })
+        const entities = simulation.buildings.length
+        const activeMachines = simulation.buildings.reduce((count, b) => count + (b.status === 'running' ? 1 : 0), 0)
+        setStats({ fps, tps, visibleTiles, entities, activeMachines })
       }
 
       rafId = requestAnimationFrame(loop)
