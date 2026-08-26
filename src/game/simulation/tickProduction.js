@@ -43,6 +43,7 @@ export function tickProduction(simulation, dt) {
 
       for (const [resourceId, qty] of Object.entries(recipe.input)) {
         building.inputBuffer.remove(resourceId, qty)
+        simulation.events.emit('itemConsumed', { resourceId, qty })
       }
       building.processing = true
       building.progress = 0
@@ -53,6 +54,7 @@ export function tickProduction(simulation, dt) {
     if (building.progress >= recipe.time) {
       for (const [resourceId, qty] of Object.entries(recipe.output)) {
         building.outputBuffer.add(resourceId, qty)
+        simulation.events.emit('itemProduced', { resourceId, qty })
       }
       building.processing = false
       building.progress = 0

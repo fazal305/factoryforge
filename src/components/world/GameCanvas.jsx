@@ -13,6 +13,8 @@ import { tickLogistics } from '../../game/simulation/tickLogistics.js'
 import { tickInserters } from '../../game/simulation/tickInserters.js'
 import { tickPower } from '../../game/simulation/tickPower.js'
 import { tickResearch } from '../../game/simulation/tickResearch.js'
+import { tickStatsSampler } from '../../game/systems/statsAggregator.js'
+import { tickBottleneckDetector } from '../../game/systems/bottleneckDetector.js'
 import { setEngineInstance } from '../../game/engine/engineInstance.js'
 import { createPlaceCommand } from '../../game/engine/constructionCommands.js'
 import { canPlaceBuilding } from '../../game/world/placement.js'
@@ -118,6 +120,8 @@ export default function GameCanvas({ initialSave }) {
     simulation.registerSystem(tickLogistics)
     simulation.registerSystem(tickInserters)
     simulation.registerSystem(tickResearch)
+    simulation.registerSystem(tickStatsSampler)
+    simulation.registerSystem(tickBottleneckDetector)
     const gameLoop = new GameLoop({ onTick: (dt) => simulation.runTick(dt) })
     if (loadedTimingRef.current) {
       gameLoop.tickCount = loadedTimingRef.current.tickCount
@@ -135,6 +139,14 @@ export default function GameCanvas({ initialSave }) {
     })
     const unsubscribeResearch = simulation.events.on('researchCompleted', (node) => {
       useUiStore.getState().pushNotification({ tone: 'success', message: `Research complete: ${node.name}` })
+    })
+    const unsubscribeItemProduced = simulation.events.on('itemProduced', ({ resourceId, qty }) => {
+      const stats = simulation.stats
+      stats.itemsProduced.set(resourceId, (stats.itemsProduced.get(resourceId) ?? 0) + qty)
+    })
+    const unsubscribeItemConsumed = simulation.events.on('itemConsumed', ({ resourceId, qty }) => {
+      const stats = simulation.stats
+      stats.itemsConsumed.set(resourceId, (stats.itemsConsumed.get(resourceId) ?? 0) + qty)
     })
     setEngineInstance({ simulation, gameLoop })
 
@@ -227,6 +239,8 @@ export default function GameCanvas({ initialSave }) {
       unsubscribeUi()
       unsubscribePowerShortage()
       unsubscribeResearch()
+      unsubscribeItemProduced()
+      unsubscribeItemConsumed()
       setEngineInstance(null)
     }
   }, [loading])

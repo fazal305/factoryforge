@@ -47,6 +47,21 @@ export class SimulationState {
     this.completedResearch = new Set()
     this.activeResearchId = null
     this.researchProgressByNode = new Map()
+
+    // Cumulative counters (fed by 'itemProduced'/'itemConsumed' events)
+    // plus a rolling history sampled by tickStatsSampler, used to
+    // derive a production-per-minute rate. bottlenecks is replaced
+    // wholesale each detection pass by tickBottleneckDetector, not
+    // accumulated — it's a snapshot of current problems, not a log.
+    this.stats = {
+      itemsProduced: new Map(),
+      itemsConsumed: new Map(),
+      elapsedSeconds: 0,
+      sampleClock: 0,
+      history: [],
+    }
+    this.bottlenecks = []
+    this.bottleneckClock = 0
   }
 
   registerSystem(system) {

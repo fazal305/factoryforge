@@ -40,5 +40,6 @@ export function tickExtraction(simulation, dt) {
 
     const added = building.outputBuffer.add(building.depositResourceId, extracted)
     world.depositAmount[building.depositTileIndex] -= added
+    if (added > 0) simulation.events.emit('itemProduced', { resourceId: building.depositResourceId, qty: added })
   }
 }
