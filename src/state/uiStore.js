@@ -74,4 +74,16 @@ export const useUiStore = create((set, get) => ({
 
   // --- helper used by build-mode consumers ---
   isInBuildMode: () => Boolean(get().selectedBuildingId),
+
+  // --- game session control ---
+  // worldEpoch is used as GameCanvas's React `key`: bumping it forces a
+  // full unmount/remount, which is the simplest way to fully replace
+  // the world/simulation/camera for New Game or Load Game without
+  // threading a reset path through every ref in that component.
+  worldEpoch: 0,
+  pendingLoad: null,
+  requestNewGame: () =>
+    set((s) => ({ worldEpoch: s.worldEpoch + 1, pendingLoad: null, selectedEntityId: null, activePanel: PANEL.NONE })),
+  requestLoadGame: (saveData) =>
+    set((s) => ({ worldEpoch: s.worldEpoch + 1, pendingLoad: saveData, selectedEntityId: null, activePanel: PANEL.NONE })),
 }))

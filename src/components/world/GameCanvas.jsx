@@ -18,6 +18,7 @@ import { createPlaceCommand } from '../../game/engine/constructionCommands.js'
 import { canPlaceBuilding } from '../../game/world/placement.js'
 import { BUILDINGS } from '../../data/buildings.js'
 import { useUiStore } from '../../state/uiStore.js'
+import { deserializeSimulation } from '../../storage/saveGame.js'
 import PerformanceMonitor from './PerformanceMonitor.jsx'
 import './GameCanvas.css'
 
@@ -30,11 +31,20 @@ const WORLD_SEED = 20260825
  * the render loop. This is the boundary between React and the
  * non-React game engine: everything below this component reads/writes
  * plain objects and refs, never React state, on the hot path.
+ *
+ * Passing `initialSave` (a validated save-data object) loads that game
+ * instead of generating a fresh world — used for Load Game and Import
+ * Save. App.jsx remounts this component (via a `key` bump in uiStore)
+ * to start a new session, which is the simplest way to fully replace
+ * the world/simulation/camera without threading a reset path through
+ * every ref below.
  */
-export default function GameCanvas() {
+export default function GameCanvas({ initialSave }) {
   const containerRef = useRef(null)
   const canvasRef = useRef(null)
   const worldRef = useRef(null)
+  const simulationRef = useRef(null)
+  const loadedTimingRef = useRef(null)
   const cameraRef = useRef(createCamera())
   const hoverTileRef = useRef(null)
   const selectedTileRef = useRef(null)
@@ -44,6 +54,18 @@ export default function GameCanvas() {
   const [stats, setStats] = useState({ fps: 0, tps: 0, visibleTiles: 0 })
 
   useEffect(() => {
+    if (initialSave) {
+      const { simulation, simTime, tickCount } = deserializeSimulation(initialSave)
+      worldRef.current = simulation.world
+      simulationRef.current = simulation
+      loadedTimingRef.current = { simTime, tickCount }
+      const center = tileToIso(simulation.world.width / 2, simulation.world.height / 2)
+      cameraRef.current.x = center.x
+      cameraRef.current.y = center.y
+      setLoading(false)
+      return
+    }
+
     const worker = new Worker(new URL('../../workers/worldGen.worker.js', import.meta.url), {
       type: 'module',
     })
@@ -60,6 +82,9 @@ export default function GameCanvas() {
     worker.postMessage({ width: WORLD_WIDTH, height: WORLD_HEIGHT, seed: WORLD_SEED })
 
     return () => worker.terminate()
+    // initialSave is only meaningful on first mount of a session (App
+    // remounts this component with a new key for New Game/Load Game).
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   useEffect(() => {
@@ -85,7 +110,8 @@ export default function GameCanvas() {
     const resizeObserver = new ResizeObserver(resize)
     resizeObserver.observe(container)
 
-    const simulation = new SimulationState(worldRef.current)
+    const simulation = simulationRef.current ?? new SimulationState(worldRef.current)
+    simulationRef.current = simulation
     simulation.registerSystem(tickPower)
     simulation.registerSystem(tickExtraction)
     simulation.registerSystem(tickProduction)
@@ -93,6 +119,10 @@ export default function GameCanvas() {
     simulation.registerSystem(tickInserters)
     simulation.registerSystem(tickResearch)
     const gameLoop = new GameLoop({ onTick: (dt) => simulation.runTick(dt) })
+    if (loadedTimingRef.current) {
+      gameLoop.tickCount = loadedTimingRef.current.tickCount
+      gameLoop.simTimeSeconds = loadedTimingRef.current.simTime
+    }
     const uiState = useUiStore.getState()
     gameLoop.setPaused(uiState.isPaused)
     gameLoop.setSpeed(uiState.simSpeed)
@@ -206,7 +236,7 @@ export default function GameCanvas() {
       <canvas ref={canvasRef} className="ff-game-canvas__surface" />
       {loading && (
         <div className="ff-game-canvas__loading">
-          <span>Generating world…</span>
+          <span>{initialSave ? 'Loading save…' : 'Generating world…'}</span>
         </div>
       )}
       {!loading && import.meta.env.DEV && <PerformanceMonitor stats={stats} />}

@@ -14,13 +14,15 @@ import './App.css'
 export default function App() {
   useKeyboardShortcuts()
   const activePanel = useUiStore((s) => s.activePanel)
+  const worldEpoch = useUiStore((s) => s.worldEpoch)
+  const pendingLoad = useUiStore((s) => s.pendingLoad)
 
   return (
     <div className="ff-app">
       <HudBar />
 
       <main className="ff-viewport">
-        <GameCanvas />
+        <GameCanvas key={worldEpoch} initialSave={pendingLoad} />
 
         <NotificationStack />
         <InspectorPanel />
