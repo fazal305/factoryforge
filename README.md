@@ -4,6 +4,10 @@
 
 Inspired by the automation/logistics genre (Factorio and its relatives), but original throughout: its own mechanics, its own visual identity, its own engine. Nothing here is copied branding, art, or UI.
 
+## Live Demo
+
+**[factoryforge-two.vercel.app](https://factoryforge-two.vercel.app)**
+
 ---
 
 ## Table of contents
