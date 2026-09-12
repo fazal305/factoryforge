@@ -46,7 +46,7 @@
   --ff-color-resource-circuit: #6fbf8b;
 
   /* ---- Typography ---- */
-  --ff-font-ui: "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --ff-font-ui: "Onest", "Segoe UI", system-ui, -apple-system, sans-serif;
   --ff-font-mono: "JetBrains Mono", "Consolas", monospace;
 
   --ff-font-size-xs: 0.6875rem;
