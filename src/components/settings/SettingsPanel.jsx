@@ -177,7 +177,7 @@ export default function SettingsPanel() {
             </Button>
           </div>
 
-          {saves.length > 0 && (
+          {saves.length > 0 ? (
             <ul className="ff-settings__save-list">
               {saves.map((save) => (
                 <li key={save.name}>
@@ -196,6 +196,8 @@ export default function SettingsPanel() {
                 </li>
               ))}
             </ul>
+          ) : (
+            <p className="ff-settings__empty">No saves yet</p>
           )}
 
           <div className="ff-settings__actions-row">

@@ -84,6 +84,12 @@
   color: var(--ff-color-text-muted);
 }
 
+.ff-settings__empty {
+  font-size: var(--ff-font-size-sm);
+  color: var(--ff-color-text-muted);
+  margin: var(--ff-space-2) 0;
+}
+
 .ff-settings__save-actions {
   display: flex;
   gap: var(--ff-space-2);
