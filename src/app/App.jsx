@@ -9,6 +9,7 @@ import ResearchPanel from '../components/research/ResearchPanel'
 import SettingsPanel from '../components/settings/SettingsPanel'
 import ShortcutsHelp from '../components/settings/ShortcutsHelp'
 import NotificationStack from '../components/common/NotificationStack'
+import { ErrorBoundary } from '../components/common/ErrorBoundary.jsx'
 import GameCanvas from '../components/world/GameCanvas.jsx'
 import './App.css'
 
@@ -24,21 +25,23 @@ export default function App() {
   }, [reducedMotion])
 
   return (
-    <div className="ff-app">
-      <HudBar />
+    <ErrorBoundary>
+      <div className="ff-app">
+        <HudBar />
 
-      <main className="ff-viewport">
-        <GameCanvas key={worldEpoch} initialSave={pendingLoad} />
+        <main className="ff-viewport">
+          <GameCanvas key={worldEpoch} initialSave={pendingLoad} />
 
-        <NotificationStack />
-        <InspectorPanel />
-        {activePanel === PANEL.STATS && <StatsPanel />}
-        {activePanel === PANEL.RESEARCH && <ResearchPanel />}
-        <BuildToolbar />
-      </main>
+          <NotificationStack />
+          <InspectorPanel />
+          {activePanel === PANEL.STATS && <StatsPanel />}
+          {activePanel === PANEL.RESEARCH && <ResearchPanel />}
+          <BuildToolbar />
+        </main>
 
-      {activePanel === PANEL.SETTINGS && <SettingsPanel />}
-      {activePanel === PANEL.SHORTCUTS && <ShortcutsHelp />}
-    </div>
+        {activePanel === PANEL.SETTINGS && <SettingsPanel />}
+        {activePanel === PANEL.SHORTCUTS && <ShortcutsHelp />}
+      </div>
+    </ErrorBoundary>
   )
 }
