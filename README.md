@@ -50,10 +50,6 @@ Concretely, a player:
 
 Every building, resource, recipe, and research node is plain data (`src/data/`) — none of it is hardcoded into component logic.
 
-## Screenshots
-
-_Not yet captured — the project has been built and verified through code-level testing and headless browser automation. Add screenshots here once you've played a session._
-
 ## Architecture
 
 ```
