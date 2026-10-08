@@ -178,3 +178,11 @@ See [Architecture](#architecture) above for the annotated tree. Two folders from
 - **Statistics/bottleneck data don't persist across save/load** — they're derived, session-local counters (reset to zero on load), not authoritative game state. Building/inventory/research state does persist fully.
 - **Live FPS could not be measured in this project's own automated browser-testing sandbox** — that specific tool reports the tab as `document.hidden`, which suspends `requestAnimationFrame` regardless of viewport size. Performance claims above come from direct Node.js benchmarking of the simulation systems and the render function's per-call cost instead, which is arguably the more rigorous measurement — but a real in-browser FPS check is worth doing yourself.
 - **Camera/build controls are mouse-only** — no keyboard-driven camera pan or tile cursor, so the world view itself isn't fully keyboard-operable (all UI chrome — HUD, panels, toolbar — is).
+
+## License
+
+Free for personal, educational, and noncommercial use under the [PolyForm Noncommercial License 1.0.0](LICENSE).
+
+Commercial use requires a paid commercial license. Contact fazalabbas2002@gmail.com.
+
+Versions up to and including `last-mit` were released under the MIT License and remain available under MIT.
